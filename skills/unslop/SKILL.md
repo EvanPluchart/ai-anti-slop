@@ -7,7 +7,7 @@ description: Use when asked to audit, "unslop" or fix a web app or site that loo
 
 Slop is an **absence of decision**: the tool's default value, left as it is. This skill measures it, reports it, and fixes it **only after approval**, without replacing it with another default.
 
-The catalogue of 123 rules (`UI-`, `COPY-`, `VIS-`, `UX-`, `A11Y-`, `DARK-`, `CONV-`), with their sources, is in `references/catalogue.md`. Read only the section you need: `grep -n "UX-05" references/catalogue.md`.
+The catalogue of 125 rules (`UI-`, `COPY-`, `VIS-`, `UX-`, `A11Y-`, `DARK-`, `CONV-`), with their sources, is in `references/catalogue.md`. Read only the section you need: `grep -n "UX-05" references/catalogue.md`.
 
 ## Steps
 

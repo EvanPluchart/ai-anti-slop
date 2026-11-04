@@ -1,6 +1,6 @@
 {
   "name": "ai-anti-slop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Audit and fix web apps that look AI-generated: default-looking UI, filler copy, UX states that lie, accessibility and mobile problems. Measured in a real headless Chrome with axe-core, reported first, fixed only with your approval. Skills: audit (full pass), unslop, ui-ux-improver, mobile-ux.",
   "author": { "name": "Evan Pluchart" },
   "license": "MIT",

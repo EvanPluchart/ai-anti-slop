@@ -9,7 +9,7 @@ Slop is an absence of decision: the tool's default, left as it is. These skills 
 | Skill | What it does | Ask for it with |
 |---|---|---|
 | `ai-anti-slop:audit` | Full pass: unslop, then ui-ux-improver, then mobile-ux on the same real data, then a before/after re-measure of every screen, with one commit per batch | "Run a full audit of this app on a new branch" |
-| `ai-anti-slop:unslop` | Removes the defaults of a generated design: copy, visuals, accessibility, dark patterns (123 rules with sources) | "Unslop this app", "this looks AI-made" |
+| `ai-anti-slop:unslop` | Removes the defaults of a generated design: copy, visuals, accessibility, dark patterns (125 rules with sources) | "Unslop this app", "this looks AI-made" |
 | `ai-anti-slop:ui-ux-improver` | Makes each screen useful, truthful about its state (loading, empty, error, stale data) and consistent with the others: flows, forms, modals, lists, filters | "This screen feels empty", "improve the UX of this page" |
 | `ai-anti-slop:mobile-ux` | Makes the app work with a finger: touch targets, 16 px fields (iOS zoom), sheets, Back gesture, keyboard, safe areas, landscape | "Make it work on my phone" |
 

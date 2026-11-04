@@ -8,7 +8,7 @@
       "name": "ai-anti-slop",
       "source": "./",
       "description": "Audit and fix AI slop in web apps: unslop, ui-ux-improver, mobile-ux, and a full-pass audit.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "category": "development"
     }
   ]
