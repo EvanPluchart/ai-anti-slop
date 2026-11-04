@@ -1,0 +1,4 @@
+interface:
+  display_name: "Full audit"
+  short_description: "Full quality pass: unslop, UI/UX, mobile, then a before/after re-measure"
+  default_prompt: "Use $audit to run a full quality pass on this app on a separate branch, and report before fixing."

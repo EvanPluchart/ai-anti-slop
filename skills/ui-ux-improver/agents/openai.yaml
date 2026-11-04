@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI/UX improver"
+  short_description: "Make every screen of a web app useful, truthful and consistent with the others"
+  default_prompt: "Use $ui-ux-improver to evaluate every screen of this app (question, truth of states, consistency) and report before fixing anything."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mobile UX"
+  short_description: "Make a web app usable by touch, on phones and tablets"
+  default_prompt: "Use $mobile-ux to measure every screen in touch emulation and list what to transform and what to check on a real phone."

@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+anti-slop/
+anti-slop-out/
+*.log
