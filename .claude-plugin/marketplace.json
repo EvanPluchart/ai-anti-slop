@@ -2,13 +2,15 @@
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "ai-anti-slop",
   "description": "Skills to audit and fix web apps that look AI-generated.",
-  "owner": { "name": "Evan Pluchart" },
+  "owner": {
+    "name": "Evan Pluchart"
+  },
   "plugins": [
     {
       "name": "ai-anti-slop",
       "source": "./",
-      "description": "Audit and fix AI slop in web apps: unslop, ui-ux-improver, mobile-ux, and a full-pass audit.",
-      "version": "0.2.0",
+      "description": "Audit and fix AI slop in web apps: a direction first, then slop-check, ui-ux-improver, mobile-ux and a full-pass audit, measured in a real browser.",
+      "version": "0.3.0",
       "category": "development"
     }
   ]

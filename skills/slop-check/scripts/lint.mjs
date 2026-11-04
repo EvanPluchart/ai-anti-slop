@@ -19,7 +19,7 @@ const locale = config.locale ?? "en-US";
 const allow = config.allow ?? [];
 
 const EXT = new Set([".html", ".htm", ".jsx", ".tsx", ".js", ".ts", ".mjs", ".vue", ".svelte", ".astro", ".css", ".scss"]);
-const SKIP = new Set(["node_modules", ".git", ".next", "dist", "build", "out", "coverage", ".turbo", ".vercel", "output", "vendor"]);
+const SKIP = new Set(["node_modules", ".git", ".next", "dist", "build", "out", "coverage", ".turbo", ".vercel", "output", "vendor", "__fixtures__", "__mocks__", "__tests__"]);
 const ignorePaths = config.ignorePaths ?? [];
 
 // Rules: catalogue id (references/catalogue.md), severity, pattern, short message.
@@ -134,6 +134,22 @@ for (const file of files) {
       if (!m) continue;
       if (new RegExp(`anti-slop-ignore[^\\n]*${r.id}`).test(line + prev)) continue;
       add({ id: r.id, sev: r.sev, file: rel, line: i + 1, match: m[0].slice(0, 80), msg: r.msg });
+    }
+    const ignored = (id) => new RegExp(`anti-slop-ignore[^\\n]*${id}`).test(line + prev);
+    // UI-31: one-off Tailwind values off the 4 px grid (mt-[13px], h-[31px]); 1-2 px nudges and hairlines stay.
+    if (!ignored("UI-31"))
+      for (const m of line.matchAll(/(?<![\w-])-?(?:[mp][trblxyse]?|gap(?:-[xy])?|space-[xy]|h|min-h|max-h|top|right|bottom|left|inset(?:-[xy])?|translate-[xy]|scroll-[mp][trblxy]?)-\[(\d+(?:\.\d+)?)px\]/g))
+        if (+m[1] > 2 && +m[1] % 4) { add({ id: "UI-31", sev: S, file: rel, line: i + 1, match: m[0], msg: "one-off value off the 4 px grid: use a step of the scale" }); break; }
+    // COPY-16: copy that shouts, in text between tags and in string literals. Class strings ("flex!", the Tailwind v4
+    // important modifier) and toasts (COPY-13) are left out. French puts a (non-breaking) space before "!".
+    if (!/toast/.test(line) && !(isCode && /^\s*(?:\/\/|\*|import )/.test(line)) && !ignored("COPY-16")) {
+      const greet = line.match(/\b(?:Welcome back|Bon retour|Bienvenue|Content de vous revoir|Ravi de vous revoir|Hello|Bonjour|Salut|Hi|Hey)\b[^"'`<>{}]{0,40}(?:!|\u{1F44B})/u);
+      const tag = line.match(/>([^<>{}]*[\p{L}\p{N})][   ]?!+)[   ]*</u);
+      // A class string: most of its words are utilities (a hyphen, colon, slash or bracket after a letter), or one lowercase word with "!".
+      const classy = (s) => { const w = s.trim().split(/\s+/); return w.filter((t) => /[a-z0-9\]][-:\/[]|^[a-z]+!$/.test(t)).length >= Math.max(1, w.length / 2); };
+      const lit = [...line.matchAll(/(["'`])((?:(?!\1)[^\\\n])*?[\p{L}\p{N})}][   ]?!+)[   ]*\1/gu)].find((m) => !classy(m[2]));
+      const hit = greet ?? tag ?? lit;
+      if (hit) add({ id: "COPY-16", sev: S, file: rel, line: i + 1, match: hit[0].slice(0, 80), msg: greet ? "greeting as the title (\"Welcome back!\"): use the page or the period as the title" : "exclamation mark in interface copy: state it plainly" });
     }
     // UI-01 in raw CSS: linear gradient with a purple hex color (hue 250-300°).
     for (const g of line.match(/linear-gradient\([^)]*\)/g) ?? [])

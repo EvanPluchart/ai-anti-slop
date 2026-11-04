@@ -6,6 +6,8 @@ export default function Page() {
       <p>Trusted by 10,000+ teams</p>
       <button type="button" className="outline-none">Learn More</button>
       <p>3 item(s) selected</p>
+      <div className="mt-[13px] px-[7px]">Bon retour, Evan ! 👋</div>
+      <button type="button">Enregistrer !</button>
     </main>
   );
 }

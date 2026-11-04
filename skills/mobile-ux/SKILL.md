@@ -1,15 +1,15 @@
 ---
 name: mobile-ux
-description: Use when a web app or site must work well on phones or tablets - mobile pass, responsive, "on my phone", horizontal overflow, menu or bottom bar, unreadable tables, buttons too small for a finger, virtual keyboard hiding a field, iOS zoom on focus, sticky bar covering content, tooltips or actions visible only on hover, notch and safe areas, landscape, tablet. To remove generated-design defaults, use unslop; for general screen UX, use ui-ux-improver; for a full pass of the whole app, use the audit skill.
+description: Use when a web app or site must work well on phones or tablets - mobile pass, responsive, "on my phone", horizontal overflow, menu or bottom bar, unreadable tables, buttons too small for a finger, virtual keyboard hiding a field, iOS zoom on focus, sticky bar covering content, tooltips or actions visible only on hover, notch and safe areas, landscape, tablet; in French « sur mon téléphone », « passe mobile », « ça déborde sur mobile », « boutons trop petits ». To remove generated-design defaults, use slop-check; for general screen UX, use ui-ux-improver; for a full pass of the whole app, use the audit skill.
 ---
 
 # mobile-ux
 
 On a phone, the user holds the device in one hand, aims with a thumb, hovers over nothing, and the virtual keyboard takes half the screen. A "responsive" page that merely drops to one column at 375 px misses almost all of this. The skill measures in touch emulation, reads the code for what emulation cannot see, transforms layouts, and lists what is left to verify on a real phone.
 
-Rules: `references/rules.md` (MOB-*, with sources): height and keyboard, targets, hover, reflow, gestures, navigation, tablet, sheets and dialogs, scrolling, fields and iOS Safari, images and performance, home screen; then what the tool measures (section 13), real-phone verification (14) and myths (15). Neighboring rules in the unslop catalogue: A11Y-09, A11Y-10, A11Y-14, A11Y-17 to A11Y-20, UX-13, UX-20.
-**Full pass**: the audit skill runs this skill after unslop and ui-ux-improver, because it transforms layouts that are already settled; common re-measure at the end.
-Tool: `${CLAUDE_SKILL_DIR}/../unslop/scripts/inspect.mjs <url> --mobile`: a reference at 1280 px, then 320, 390, 768 px and 844×390 in landscape, in **touch emulation** (it is what flips `hover: none` and `pointer: coarse`; the summary says whether it took). One page at a time, prefixed with `nice -n 10`. `--help` for options.
+Rules: `references/rules.md` (MOB-*, with sources): height and keyboard, targets, hover, reflow, gestures, navigation, tablet, sheets and dialogs, scrolling, fields and iOS Safari, images and performance, home screen; then what the tool measures (section 13), real-phone verification (14) and myths (15). Neighboring rules in the slop-check catalogue: A11Y-09, A11Y-10, A11Y-14, A11Y-17 to A11Y-20, UX-13, UX-20.
+**Full pass**: the audit skill runs this skill after slop-check and ui-ux-improver, because it transforms layouts that are already settled; common re-measure at the end.
+Tool: `${CLAUDE_SKILL_DIR}/../slop-check/scripts/inspect.mjs <url> --mobile`: a reference at 1280 px, then 320, 390, 768 px and 844×390 in landscape, in **touch emulation** (it is what flips `hover: none` and `pointer: coarse`; the summary says whether it took). One page at a time, prefixed with `nice -n 10`. `--help` for options.
 
 ## Steps
 

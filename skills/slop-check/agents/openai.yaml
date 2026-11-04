@@ -1,0 +1,4 @@
+interface:
+  display_name: "Slop check"
+  short_description: "Audit and fix generic, default-looking design, copy and UX in a web app"
+  default_prompt: "Use $slop-check to audit this app for AI slop and report before fixing anything."

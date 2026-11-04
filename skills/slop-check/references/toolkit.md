@@ -1,6 +1,6 @@
 # Toolkit (configuration, machine, stack pitfalls)
 
-Shared by the collection (unslop, ui-ux-improver, mobile-ux, audit). The scripts live in `scripts/` next to this folder: `lint.mjs` (static scan, no browser) and `inspect.mjs` (one headless Chrome, axe-core, layout probes, captures). Both need Node 22+; `inspect.mjs` also needs Chrome, Chromium or Edge (`CHROME_PATH` to point at a specific binary).
+Shared by the collection (slop-check, ui-ux-improver, mobile-ux, audit). The scripts live in `scripts/` next to this folder: `lint.mjs` (static scan, no browser) and `inspect.mjs` (one headless Chrome, axe-core, layout probes, captures). Both need Node 22+; `inspect.mjs` also needs Chrome, Chromium or Edge (`CHROME_PATH` to point at a specific binary).
 
 ## `.anti-slop.json` (project root, optional)
 

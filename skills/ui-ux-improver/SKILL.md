@@ -1,15 +1,15 @@
 ---
 name: ui-ux-improver
-description: Use when improving the UI and UX of an existing web application (internal tool, back office, dashboard, editor, SaaS) - empty, soulless or unclear screens, layout that changes from page to page, badly built forms, modals, lists, filters, tabs or confirmations, loading or error states that lie, stale data after an action, "the app feels empty", "improve the UX of this screen", "do a UX pass on these pages". A full pass of the whole app ("the best possible app") starts with the audit skill, which chains this one; to remove generated-design defaults, use unslop; for phones and tablets, use mobile-ux. It improves existing screens; it does not design new ones.
+description: Use when improving the UI and UX of an existing web application (internal tool, back office, dashboard, editor, SaaS) - empty, soulless or unclear screens, layout that changes from page to page, badly built forms, modals, lists, filters, tabs or confirmations, loading or error states that lie, stale data after an action, "the app feels empty", "improve the UX of this screen", "do a UX pass on these pages", and in French « l'app fait vide », « améliore l'UX de cet écran », « passe UX sur ces pages ». A full pass of the whole app ("the best possible app") starts with the audit skill, which chains this one; to remove generated-design defaults, use slop-check; for phones and tablets, use mobile-ux. It improves existing screens; it does not design new ones.
 ---
 
 # ui-ux-improver
 
 An app screen is good when it **answers right away the question it was opened for**, **tells the truth** about the state of the data, and **behaves like the app's other screens**. The skill rates each screen on these three axes, triages, fixes in the shared components, then verifies in the rendered page.
 
-Rules: `references/rules.md` (UXI-*, with sources): screen, truthful states, navigation and shell, lists and filters, forms, modals and messages, copy, heavy use, method, myths not to apply. `grep -n "UXI-13" references/rules.md` for one rule. The UX-* and A11Y-* rules of the unslop catalogue still apply: `grep -n "UX-05" ${CLAUDE_SKILL_DIR}/../unslop/references/catalogue.md`.
-**Full pass** ("the best possible app"): the audit skill chains unslop first (remove the defaults), this skill next, mobile-ux last, then a common re-measure of every screen.
-Tools (shared across the collection): `${CLAUDE_SKILL_DIR}/../unslop/scripts/inspect.mjs` (render, axe, page errors) and `${CLAUDE_SKILL_DIR}/../unslop/scripts/lint.mjs` (code). `--help` for options.
+Rules: `references/rules.md` (UXI-*, with sources): screen, truthful states, navigation and shell, lists and filters, forms, modals and messages, copy, heavy use, method, myths not to apply. `grep -n "UXI-13" references/rules.md` for one rule. The UX-* and A11Y-* rules of the slop-check catalogue still apply: `grep -n "UX-05" ${CLAUDE_SKILL_DIR}/../slop-check/references/catalogue.md`.
+**Full pass** ("the best possible app"): the audit skill chains slop-check first (remove the defaults), this skill next, mobile-ux last, then a common re-measure of every screen.
+Tools (shared across the collection): `${CLAUDE_SKILL_DIR}/../slop-check/scripts/inspect.mjs` (render, axe, page errors) and `${CLAUDE_SKILL_DIR}/../slop-check/scripts/lint.mjs` (code). `--help` for options.
 
 ## Steps
 

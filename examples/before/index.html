@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MarginAI ✨ Dashboard</title>
+<!-- A vibe-coded dashboard, slop on purpose: the "before" of the README. See ../after for the same screen after slop-check. -->
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Inter, system-ui, sans-serif; letter-spacing: -0.02em; color: #e9e5ff; min-height: 100vh;
+    display: flex; gap: 24px; padding: 24px;
+    background:
+      radial-gradient(640px 420px at 82% 6%, rgba(236, 72, 153, 0.38), transparent 60%),
+      radial-gradient(720px 520px at 8% 92%, rgba(139, 92, 246, 0.5), transparent 60%),
+      linear-gradient(135deg, #1e1b4b, #4c1d95 55%, #312e81);
+  }
+  .glass { background: rgba(255, 255, 255, 0.07); backdrop-filter: blur(20px); border: 1px solid rgba(167, 139, 250, 0.35); border-radius: 24px; box-shadow: 0 0 32px rgba(139, 92, 246, 0.45); }
+  aside { width: 260px; flex: none; padding: 22px 18px; display: flex; flex-direction: column; gap: 18px; }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .tile { width: 38px; height: 38px; border-radius: 13px; display: grid; place-items: center; font-size: 19px; background: linear-gradient(135deg, #a855f7, #ec4899); box-shadow: 0 0 22px rgba(236, 72, 153, 0.65); }
+  .logo b { font-size: 21px; font-weight: 900; background: linear-gradient(90deg, #c4b5fd, #f0abfc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .pro { font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 999px; color: #fff; background: linear-gradient(90deg, #8b5cf6, #ec4899); box-shadow: 0 0 14px rgba(236, 72, 153, 0.75); }
+  .search { display: flex; align-items: center; gap: 8px; padding: 11px 13px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(196, 181, 253, 0.3); }
+  .search input { flex: 1; border: 0; outline: none; background: transparent; color: #f5f3ff; font: inherit; font-size: 13px; }
+  .search input::placeholder { color: rgba(221, 214, 254, 0.5); }
+  .kbd { font-size: 10px; padding: 2px 6px; border-radius: 999px; background: rgba(139, 92, 246, 0.5); color: #fff; }
+  .label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; color: rgba(196, 181, 253, 0.55); margin: 4px 0 -6px 8px; }
+  nav { display: flex; flex-direction: column; gap: 5px; }
+  nav a { display: flex; align-items: center; gap: 11px; padding: 10px 13px; border-radius: 16px; color: #ddd6fe; font-size: 14px; text-decoration: none; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  nav a:hover { transform: scale(1.04); }
+  nav a.on { color: #fff; font-weight: 800; background: linear-gradient(90deg, rgba(168, 85, 247, 0.7), rgba(236, 72, 153, 0.5)); box-shadow: 0 0 26px rgba(168, 85, 247, 0.6); }
+  .pill { margin-left: auto; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 999px; color: #fbcfe8; background: rgba(236, 72, 153, 0.25); border: 1px solid rgba(244, 114, 182, 0.6); box-shadow: 0 0 12px rgba(236, 72, 153, 0.55); }
+  .upgrade { margin-top: auto; padding: 18px; border-radius: 24px; background: linear-gradient(135deg, rgba(168, 85, 247, 0.55), rgba(236, 72, 153, 0.45)); box-shadow: 0 0 44px rgba(236, 72, 153, 0.45); }
+  .upgrade h3 { font-size: 15px; font-weight: 900; margin-bottom: 6px; }
+  .upgrade p { font-size: 12px; color: rgba(245, 243, 255, 0.6); margin-bottom: 12px; }
+  .upgrade small { display: block; font-size: 11px; color: rgba(221, 214, 254, 0.45); margin-top: 10px; }
+  button { font: inherit; cursor: pointer; border: 0; }
+  .glow { padding: 10px 18px; border-radius: 999px; font-size: 13px; font-weight: 800; color: #fff; background: linear-gradient(90deg, #8b5cf6, #ec4899); box-shadow: 0 0 24px rgba(236, 72, 153, 0.6); transition: all 0.3s; }
+  .ghost { padding: 10px 18px; border-radius: 999px; font-size: 13px; color: #ede9fe; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(196, 181, 253, 0.4); }
+  main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 22px; }
+  header { display: flex; align-items: center; gap: 16px; }
+  header > div { flex: 1; }
+  h1 { font-size: 40px; font-weight: 900; background: linear-gradient(90deg, #ffffff, #c4b5fd 40%, #f0abfc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .sub { font-size: 15px; color: rgba(196, 181, 253, 0.55); margin-top: 6px; }
+  .live { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; color: #86efac; background: rgba(34, 197, 94, 0.15); border: 1px solid rgba(74, 222, 128, 0.5); }
+  .live i { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 10px #4ade80; animation: ping 1.2s infinite; }
+  @keyframes ping { 50% { transform: scale(1.8); opacity: 0.4; } }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .stat { padding: 20px 22px; }
+  .k { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(196, 181, 253, 0.6); }
+  .v { font-size: 34px; font-weight: 900; margin: 6px 0 2px; background: linear-gradient(90deg, #fff, #f0abfc); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .d { font-size: 12px; font-weight: 800; color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.8); }
+  .spark { display: block; width: 100%; height: 34px; margin-top: 8px; filter: drop-shadow(0 0 6px #f0abfc); }
+  .grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+  .card { padding: 22px 24px; }
+  h2 { font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.12em; color: #ede9fe; }
+  .bars { display: flex; align-items: flex-end; gap: 12px; height: 190px; margin-top: 22px; }
+  .bars span { flex: 1; border-radius: 999px; box-shadow: 0 0 18px rgba(236, 72, 153, 0.45); }
+  .days { display: flex; gap: 12px; margin-top: 10px; }
+  .days span { flex: 1; text-align: center; font-size: 10px; font-weight: 800; letter-spacing: 0.12em; color: rgba(196, 181, 253, 0.5); }
+  .top { list-style: none; display: flex; flex-direction: column; gap: 14px; margin-top: 18px; }
+  .top li { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .top li em { font-style: normal; font-size: 11px; color: rgba(196, 181, 253, 0.5); display: block; }
+  table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-top: 10px; font-size: 13px; }
+  th { text-align: left; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(196, 181, 253, 0.55); padding: 0 12px; }
+  td { padding: 10px 12px; background: rgba(255, 255, 255, 0.05); }
+  td:first-child { border-radius: 14px 0 0 14px; } td:last-child { border-radius: 0 14px 14px 0; }
+</style>
+</head>
+<body>
+<aside class="glass">
+  <div class="logo"><span class="tile">✨</span><b>MarginAI</b><span class="pro">PRO</span></div>
+  <div class="search">🔍 <input placeholder="Search anything..."><span class="kbd">⌘K</span></div>
+  <p class="label">Navigation</p>
+  <nav>
+    <a class="on" href="#">🏠 Overview</a>
+    <a href="#">📬 Issues <span class="pill">New ✨</span></a>
+    <a href="#">👥 Subscribers <span class="pill">12</span></a>
+    <a href="#">📈 Growth <span class="pill">Beta 🚀</span></a>
+    <a href="#">💰 Revenue</a>
+    <a href="#">⚙️ Settings</a>
+  </nav>
+  <div class="upgrade">
+    <h3>🚀 Upgrade to PRO</h3>
+    <p>Supercharge your newsletter and unlock the power of AI ✨</p>
+    <button class="glow">Upgrade now →</button>
+    <small>Trusted by 10,000+ writers</small>
+  </div>
+</aside>
+<main>
+  <header>
+    <div>
+      <h1>Welcome back, Sam! 👋</h1>
+      <p class="sub">Here's what's happening with your newsletter today!!</p>
+    </div>
+    <span class="live"><i></i>Live</span>
+    <button class="ghost">Export.</button>
+    <button class="glow">✨ Generate with AI.</button>
+  </header>
+  <section class="stats">
+    <div class="stat glass"><p class="k">Total subscribers</p><p class="v">12,480</p><p class="d">🔥 +12%!!</p><svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none"><polyline fill="none" stroke="#f0abfc" stroke-width="2" points="0,24 15,20 30,22 45,12 60,15 75,6 100,4"/></svg></div>
+    <div class="stat glass"><p class="k">Open rate</p><p class="v">52.4%</p><p class="d">🚀 +4.2% this month!!</p><svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none"><polyline fill="none" stroke="#c4b5fd" stroke-width="2" points="0,20 20,22 40,14 60,16 80,9 100,7"/></svg></div>
+    <div class="stat glass"><p class="k">Clicks</p><p class="v">3,906</p><p class="d">✨ 3 less!!</p><svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none"><polyline fill="none" stroke="#f9a8d4" stroke-width="2" points="0,10 20,14 40,12 60,20 80,18 100,22"/></svg></div>
+    <div class="stat glass"><p class="k">Revenue</p><p class="v">$12,860.40</p><p class="d">💰 $4,120 this week!!</p><svg class="spark" viewBox="0 0 100 30" preserveAspectRatio="none"><polyline fill="none" stroke="#a5b4fc" stroke-width="2" points="0,26 25,18 50,20 75,10 100,6"/></svg></div>
+  </section>
+  <section class="grid">
+    <div class="card glass">
+      <h2>📈 Subscriber growth 🔥</h2>
+      <div class="bars">
+        <span style="height:48%;background:linear-gradient(#f472b6,#a855f7)"></span><span style="height:60%;background:linear-gradient(#fb923c,#f43f5e)"></span><span style="height:52%;background:linear-gradient(#facc15,#fb923c)"></span><span style="height:44%;background:linear-gradient(#4ade80,#22d3ee)"></span><span style="height:66%;background:linear-gradient(#22d3ee,#6366f1)"></span><span style="height:37%;background:linear-gradient(#818cf8,#c084fc)"></span><span style="height:32%;background:linear-gradient(#e879f9,#ec4899)"></span>
+        <span style="height:59%;background:linear-gradient(#f472b6,#a855f7)"></span><span style="height:91%;background:linear-gradient(#fb923c,#f43f5e)"></span><span style="height:70%;background:linear-gradient(#facc15,#fb923c)"></span><span style="height:63%;background:linear-gradient(#4ade80,#22d3ee)"></span><span style="height:75%;background:linear-gradient(#22d3ee,#6366f1)"></span><span style="height:46%;background:linear-gradient(#818cf8,#c084fc)"></span><span style="height:42%;background:linear-gradient(#e879f9,#ec4899)"></span>
+      </div>
+      <div class="days"><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span><span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span></div>
+    </div>
+    <div class="card glass">
+      <h2>🏆 Top issues</h2>
+      <ul class="top">
+        <li>🔥 <div>The quiet case for paper<em>by Jane Doe</em></div><span class="pill">Trending</span></li>
+        <li>💡 <div>Notes from a slow week<em>by Jane Doe</em></div><span class="pill">Hot 🔥</span></li>
+        <li>🚀 <div>Why I stopped using tags<em>by Jane Doe</em></div><span class="pill">New</span></li>
+        <li>✨ <div>Margins, literally<em>by Jane Doe</em></div><span class="pill">Beta</span></li>
+      </ul>
+    </div>
+  </section>
+  <section class="card glass">
+    <h2>Recent issues.</h2>
+    <table>
+      <thead><tr><th>Issue</th><th>Sent</th><th>Recipients</th><th>Opens</th><th>Clicks</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>🚀 A field guide to footnotes</td><td>Nov 6</td><td>12480</td><td>0</td><td>0</td><td><span class="pill">⏳ Scheduled</span></td></tr>
+        <tr><td>📄 The quiet case for paper</td><td>10/30/2026</td><td>12,310</td><td>7509</td><td>1,204</td><td><span class="pill">✅ Sent</span></td></tr>
+        <tr><td>🏷️ Why I stopped using tags</td><td>Oct 23</td><td>12152</td><td>6,684</td><td>986</td><td><span class="pill">✅ Sent</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+</body>
+</html>

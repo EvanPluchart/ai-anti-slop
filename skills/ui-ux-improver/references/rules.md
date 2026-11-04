@@ -1,6 +1,6 @@
 # ui-ux-improver rules (UXI-*)
 
-Each rule: the observable defect, the fix, how to detect it, severity, evidence. Nielsen severity (0 to 4) is assigned **after** collection: 4 -> blocker, 3 -> warning, 2 -> warning if frequent and persistent, suggestion otherwise, 1 -> suggestion. Evidence: *Consensus* (several independent sources), *Supported* (a standard or two sources), *Single source* (raise as a question if the rule contradicts the project's style guide). Related rules: UX-* and A11Y-* in `${CLAUDE_SKILL_DIR}/../unslop/references/catalogue.md`.
+Each rule: the observable defect, the fix, how to detect it, severity, evidence. Nielsen severity (0 to 4) is assigned **after** collection: 4 -> blocker, 3 -> warning, 2 -> warning if frequent and persistent, suggestion otherwise, 1 -> suggestion. Evidence: *Consensus* (several independent sources), *Supported* (a standard or two sources), *Single source* (raise as a question if the rule contradicts the project's style guide). Related rules: UX-* and A11Y-* in `${CLAUDE_SKILL_DIR}/../slop-check/references/catalogue.md`.
 
 Contents: 1. Screen · 2. Truthful states · 3. Navigation and shell · 4. Lists, tables, filters, search · 5. Forms · 6. Modals, confirmations, messages · 7. Copy · 8. Heavy use · 9. Method · 10. Myths not to apply
 

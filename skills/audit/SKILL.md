@@ -1,19 +1,19 @@
 ---
 name: audit
-description: Use for a full quality pass over a whole web app - "the best app possible", "full audit", "audit everything", "quality pass before launch", "unslop and improve the whole app". Chains unslop, then ui-ux-improver, then mobile-ux on the same real data, then one common re-measure of every screen, with fixes committed per batch and a before/after report. For a single concern (only the visual defaults, one screen's UX, only mobile), use that skill directly.
+description: Use for a full quality pass over a whole web app - "the best app possible", "full audit", "audit everything", "quality pass before launch", "unslop and improve the whole app", and in French « audit complet », « passe qualité de toute l'app », « la meilleure app possible ». Chains slop-check, then ui-ux-improver, then mobile-ux on the same real data, then one common re-measure of every screen, with fixes committed per batch and a before/after report. For a single concern (only the visual defaults, one screen's UX, only mobile), use that skill directly.
 ---
 
 # audit
 
 A full pass runs the three skills of the collection in this order, on the same real data, then measures every screen again:
 
-1. **unslop**: remove the defaults of a generated design (copy, visuals, accessibility, dark patterns).
+1. **slop-check**: remove the defaults of a generated design (copy, visuals, accessibility, dark patterns).
 2. **ui-ux-improver**: make each screen useful, truthful about its state, and consistent with the others.
 3. **mobile-ux**: make it work with a finger, on phone and tablet.
 
 Removing defaults first avoids polishing a screen you are about to recompose. Mobile comes last because it reshapes layouts that are already settled.
 
-The tools are the unslop scripts: `node ${CLAUDE_SKILL_DIR}/../unslop/scripts/lint.mjs` and `node ${CLAUDE_SKILL_DIR}/../unslop/scripts/inspect.mjs` (`--help` for the options). Each skill's own rules are in its `references/`.
+The tools are the slop-check scripts: `node ${CLAUDE_SKILL_DIR}/../slop-check/scripts/lint.mjs` and `node ${CLAUDE_SKILL_DIR}/../slop-check/scripts/inspect.mjs` (`--help` for the options). Each skill's own rules are in its `references/`.
 
 ## Before you start
 
@@ -26,18 +26,19 @@ The tools are the unslop scripts: `node ${CLAUDE_SKILL_DIR}/../unslop/scripts/li
   - `nice -n 10` on long jobs, 3 workers at most for tests and builds;
   - check `uptime` before heavy steps; if the load is above the core count, wait.
 - **Find the style guide** (DESIGN.md, tokens, `globals.css`) and write `.anti-slop.json` with the brand exceptions, each with its reason.
+- **Write the direction once for the whole app** (slop-check, step 1: product, character, surface, bright element of each kind of screen) and keep it for every screen. After the baseline, triage each screen (heavy, light or no slop): a screen with no slop gets two or three refinements at most, not a redesign.
 
 ## Steps
 
 1. **Baseline, every page.** Run `lint.mjs` on the source. Then run `inspect.mjs` on every page of the navigation, in desktop mode and with `--mobile`, into `anti-slop/measures-before/<page>/<mode>`. Measure the closed states too with `--click`: each tab of a detail page, modals, drawers, popovers. A state that is never rendered is never audited. Use a loop like the one below; do not edit code while it runs.
-2. **unslop** (see that skill): report, then fix what is approved.
+2. **slop-check** (see that skill): report, then fix what is approved.
 3. **ui-ux-improver** (see that skill): flows, states, forms, modals, lists, consistency between screens.
 4. **mobile-ux** (see that skill): touch sizes, fields at 16 px on touch, sheets, Back gesture, landscape, keyboard.
 5. **After each batch**: lint, typecheck, tests, and a look at the captures of the screens you touched. Then commit.
 6. **Re-measure everything** into `anti-slop/measures-after`. Run the production build last.
 7. **Report** (format below), then clean up: stop what you started, and leave no `ai-anti-slop` Chrome or loop running.
 
-Fixing authority follows the unslop rule: without explicit approval, report and stop. With "fix it directly", fix blockers and warnings; suggestions, missing facts (numbers, testimonials, names) and brand choices stay questions for the user.
+Fixing authority follows the slop-check rule: without explicit approval, report and stop. With "fix it directly", fix blockers and warnings; suggestions, missing facts (numbers, testimonials, names) and brand choices stay questions for the user.
 
 ### Measurement loop
 
@@ -53,7 +54,7 @@ for p in "${PAGES[@]}"; do
     while busy; do sleep 20; done
     [ $mode = desktop ] && extra=() || extra=(--mobile --no-axe)
     echo "=== $p ($mode)" >> "$OUT/summary.txt"
-    nice -n 10 perl -e 'alarm 240; exec @ARGV' node "$SKILL_DIR/../unslop/scripts/inspect.mjs" "http://localhost:3000$p" \
+    nice -n 10 perl -e 'alarm 240; exec @ARGV' node "$SKILL_DIR/../slop-check/scripts/inspect.mjs" "http://localhost:3000$p" \
       --out "$OUT/$name/$mode" --wait 3500 "${extra[@]}" 2>&1 | grep -E "^## |^- \[" >> "$OUT/summary.txt"
     sleep 2
   done

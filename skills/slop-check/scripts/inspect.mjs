@@ -92,7 +92,6 @@ const PROBE = String.raw`(() => {
   const colors = tally(textEls.map((el) => getComputedStyle(el).color));
   const bgs = tally(all.map((el) => getComputedStyle(el).backgroundColor).filter((c) => !/rgba\(0, 0, 0, 0\)|transparent/.test(c)));
   const sizes = tally(textEls.map((el) => getComputedStyle(el).fontSize));
-  if (fonts.length === 1) push("UI-10", "suggestion", "a single font family for all text: " + fonts[0][0]);
   if (/^(Inter|Roboto|Geist|Arial|Helvetica|system-ui|-apple-system|Open Sans)$/i.test(fonts[0]?.[0] || "")) push("UI-06", "suggestion", "default dominant font: " + fonts[0][0]);
   if (radii[0] && radii[0][1] >= 6 && parseFloat(radii[0][0]) >= 16 && radii.length <= 2) push("UI-16", "suggestion", "same large radius everywhere: " + radii[0][0] + " ×" + radii[0][1]);
   if (shadows[0] && shadows[0][1] >= 3) push("UI-17", "suggestion", "same shadow repeated ×" + shadows[0][1] + " : " + shadows[0][0].slice(0, 60));
@@ -156,13 +155,15 @@ const PROBE = String.raw`(() => {
     if (!labelled) push("A11Y-03", "blocker", "field without a label" + (el.placeholder ? " (placeholder only: " + el.placeholder + ")" : ""), el); }
   // Fields: readable outline (A11Y-16, WCAG 1.4.11) and a font of at least 16 px on mobile (A11Y-17, iOS zoom)
   for (const el of document.querySelectorAll("input:not([type=hidden]):not([type=submit]):not([type=button]):not([type=checkbox]):not([type=radio]),select,textarea,[data-slot=select-trigger]")) {
-    if (!vis(el) || srOnly(el)) continue; const s = getComputedStyle(el), fill = parse(s.backgroundColor), page = bgOf(el.parentElement), edge = parse(s.borderTopColor);
+    // Behind a gradient (a tinted shell), bgOf gives up: the opaque colour under the gradient stands in for the page.
+    const baseOf = (n) => { for (let e = n; e; e = e.parentElement) { const c = parse(getComputedStyle(e).backgroundColor); if (c && c.a > 0.95) return c; } return { r: 255, g: 255, b: 255 }; };
+    if (!vis(el) || srOnly(el)) continue; const s = getComputedStyle(el), fill = parse(s.backgroundColor), page = bgOf(el.parentElement) || baseOf(el.parentElement), edge = parse(s.borderTopColor);
     const ratioOf = (a, b) => { const L1 = lum(a), L2 = lum(b); return (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05); };
     const fillVisible = fill && fill.a > 0.95 && page && ratioOf(fill, page) >= 3;
     const borderRatio = edge && edge.a > 0.5 && parseFloat(s.borderTopWidth) > 0 && page ? ratioOf(edge, fill && fill.a > 0.95 ? fill : page) : 0;
     // The outline may be carried by the field's frame (prefix, search icon): the parent is checked too.
     const frame = el.parentElement, fs2 = frame ? getComputedStyle(frame) : null, fedge = fs2 ? parse(fs2.borderTopColor) : null;
-    const frameRatio = fedge && fedge.a > 0.5 && parseFloat(fs2.borderTopWidth) > 0 ? ratioOf(fedge, bgOf(frame.parentElement) || { r: 255, g: 255, b: 255 }) : 0;
+    const frameRatio = fedge && fedge.a > 0.5 && parseFloat(fs2.borderTopWidth) > 0 ? ratioOf(fedge, bgOf(frame.parentElement) || baseOf(frame.parentElement)) : 0;
     if (!fillVisible && borderRatio < 3 && frameRatio < 3) push("A11Y-16", "warning", "field outline at " + borderRatio.toFixed(2) + ":1 (3:1 expected, WCAG 1.4.11)", el);
     // On a touch device at any width: an iPhone in landscape exceeds 768 px and falls under md:text-sm.
     if ((Math.min(innerWidth, screen.width) < 500 || matchMedia("(pointer: coarse)").matches) && el.matches("input,textarea,select") && parseFloat(s.fontSize) < 16) push("A11Y-17", "warning", "field font at " + s.fontSize + " on a touch device: iOS zooms on focus (16 px at least; text-base pointer-fine:text-sm rather than md:text-sm)", el); }
@@ -212,6 +213,18 @@ const PROBE = String.raw`(() => {
   const fake = [...(body.match(/lorem ipsum|John Doe|Jane Doe|Sarah Johnson|Michael Chen|\bAcme\b|\bGlobex\b/gi) || []), ...(body.match(/\bundefined\b|\bNaN\b|\[object Object\]/g) || [])];
   if (fake.length) push("COPY-04", "blocker", "placeholder content or raw value shown: " + [...new Set(fake)].join(", "));
   const imgs = [...document.querySelectorAll("img")].filter((i) => /picsum|placehold|placekitten|unsplash\.it/.test(i.src)); if (imgs.length) push("COPY-04", "blocker", imgs.length + " filler image(s)");
+  // UI-29: negative letter-spacing on small text. UI-30: numeric table cells without tabular figures.
+  const tightSmall = textEls.filter((el) => { const s = getComputedStyle(el); return parseFloat(s.fontSize) < 16 && parseFloat(s.letterSpacing) < 0; });
+  if (tightSmall.length) push("UI-29", "suggestion", tightSmall.length + " small text(s) (< 16 px) with negative letter-spacing: 0 under 16 px, tighten display sizes only", tightSmall[0]);
+  const cellText = (c) => (c.innerText || "").trim();
+  const numCells = [...document.querySelectorAll("td, [role=cell], [role=gridcell]")].filter((c) => vis(c) && cellText(c).replace(/\D/g, "").length >= 2 &&
+    /^[+\-−–]?[\s  ]?[\d\s.,  ]*\d[\s  ]?(?:%|€|\$|£|k|M|h|min|s)?$/.test(cellText(c)))
+    .filter((c) => { const holder = [c, ...c.querySelectorAll("*")].find((e) => txt(e)) || c; return !/tabular-nums/.test(getComputedStyle(holder).fontVariantNumeric); });
+  if (numCells.length >= 3) push("UI-30", "suggestion", numCells.length + " numeric table cell(s) without tabular figures: font-variant-numeric: tabular-nums, right-aligned in their column", numCells[0]);
+  // COPY-17: short interface text ending with a full stop (an ellipsis is not one).
+  const stops = [...document.querySelectorAll("button, [role=button], [role=tab], [role=menuitem], label, legend, th, h1, h2, h3, h4, h5, h6, summary")].filter((el) => {
+    if (!vis(el) || srOnly(el)) return false; const t = (el.innerText || "").trim(); return t.length > 1 && /[^.]\.$/.test(t) && t.split(/\s+/).length <= 6; });
+  if (stops.length) push("COPY-17", "suggestion", stops.length + " short label(s) ending with a full stop (button, heading, label, tab): no final full stop", stops[0], { text: (stops[0].innerText || "").trim().slice(0, 40) });
 
   // Application screens (ui-ux-improver skill)
   const here = location.pathname.replace(/\/$/, "") || "/";

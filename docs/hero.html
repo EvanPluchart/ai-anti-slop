@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>ai-anti-slop: before and after</title>
+<!-- Source of docs/before-after.jpg. Regenerate from the repository root (Chrome, 2x):
+     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars \
+       --force-device-scale-factor=2 --window-size=1100,1553 --virtual-time-budget=4000 \
+       --screenshot=docs/before-after.png "file://$PWD/docs/hero.html"
+     The counts come from lint.mjs and inspect.mjs (1440 px) run on examples/before and examples/after.
+     Markers use the coordinates of the 1440 x 900 capture, scaled like the frame. -->
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1100px; height: 1553px; overflow: hidden; }
+  body { padding: 36px 40px; background: #0e0e10; color: #ededed; font: 14px/20px "Avenir Next", "Segoe UI", system-ui, sans-serif; display: flex; flex-direction: column; gap: 14px; }
+  .row { display: flex; align-items: baseline; gap: 12px; height: 20px; }
+  .row b { font-size: 15px; font-weight: 600; }
+  .row span { color: #a1a1a6; font-variant-numeric: tabular-nums; }
+  .row .ok { color: #4cc38a; }
+  .legend { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 8px; height: 88px; list-style: none; padding: 0; }
+  .legend li { display: flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px 0 4px; border-radius: 12px; background: rgba(229, 72, 77, 0.14); color: #ffd1d2; font-size: 12px; white-space: nowrap; }
+  .legend li i { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; background: #e5484d; color: #fff; font: 600 10px/1 "Avenir Next", system-ui, sans-serif; font-style: normal; }
+  .legend li b { font-weight: 600; color: #fff; }
+  .frame { position: relative; width: 1020px; height: 637.5px; border-radius: 10px; overflow: hidden; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1); flex: none; }
+  .frame iframe { width: 1440px; height: 900px; border: 0; transform: scale(0.70833); transform-origin: 0 0; pointer-events: none; }
+  .m { position: absolute; display: grid; place-items: center; width: 20px; height: 20px; margin: -10px 0 0 -10px; border-radius: 50%; background: #e5484d; color: #fff; font: 600 11px/1 "Avenir Next", system-ui, sans-serif; box-shadow: 0 0 0 2px #fff, 0 2px 6px rgba(0, 0, 0, 0.5); }
+  .spacer { height: 8px; flex: none; }
+</style>
+</head>
+<body>
+  <p class="row"><b>Before</b><span id="before-count">30 rules broken, measured by lint.mjs and inspect.mjs at 1440 px: 6 blockers · 11 warnings · 13 suggestions</span></p>
+  <ol class="legend">
+    <li><i>1</i><b>UI-02</b> gradient text</li>
+    <li><i>2</i><b>COPY-16</b> greeting, “!!”</li>
+    <li><i>3</i><b>UI-29</b> tight tracking</li>
+    <li><i>4</i><b>A11Y-03</b> field without a label</li>
+    <li><i>5</i><b>UI-35</b> badges</li>
+    <li><i>6</i><b>UI-21</b> emoji icons</li>
+    <li><i>7</i><b>UI-08</b> letter-spaced caps</li>
+    <li><i>8</i><b>COPY-18</b> +12%!!</li>
+    <li><i>9</i><b>UI-20</b> sparklines</li>
+    <li><i>10</i><b>COPY-17</b> “Export.”</li>
+    <li><i>11</i><b>UI-36</b> rainbow bars</li>
+    <li><i>12</i><b>COPY-04</b> Jane Doe</li>
+    <li><i>13</i><b>UI-30</b> ragged figures</li>
+    <li><i>14</i><b>UI-01</b> purple gradient</li>
+  </ol>
+  <div class="frame">
+    <iframe src="../examples/before/index.html" title="Before" scrolling="no"></iframe>
+    <span class="m" style="left: calc(300px * 0.70833); top: calc(30px * 0.70833)">1</span>
+    <span class="m" style="left: calc(768px * 0.70833); top: calc(30px * 0.70833)">2</span>
+    <span class="m" style="left: calc(670px * 0.70833); top: calc(92px * 0.70833)">3</span>
+    <span class="m" style="left: calc(268px * 0.70833); top: calc(108px * 0.70833)">4</span>
+    <span class="m" style="left: calc(242px * 0.70833); top: calc(52px * 0.70833)">5</span>
+    <span class="m" style="left: calc(44px * 0.70833); top: calc(258px * 0.70833)">6</span>
+    <span class="m" style="left: calc(305px * 0.70833); top: calc(136px * 0.70833)">7</span>
+    <span class="m" style="left: calc(422px * 0.70833); top: calc(214px * 0.70833)">8</span>
+    <span class="m" style="left: calc(556px * 0.70833); top: calc(228px * 0.70833)">9</span>
+    <span class="m" style="left: calc(1226px * 0.70833); top: calc(44px * 0.70833)">10</span>
+    <span class="m" style="left: calc(774px * 0.70833); top: calc(386px * 0.70833)">11</span>
+    <span class="m" style="left: calc(1286px * 0.70833); top: calc(384px * 0.70833)">12</span>
+    <span class="m" style="left: calc(866px * 0.70833); top: calc(724px * 0.70833)">13</span>
+    <span class="m" style="left: calc(150px * 0.70833); top: calc(610px * 0.70833)">14</span>
+  </div>
+  <div class="spacer"></div>
+  <p class="row"><b>After</b><span class="ok" id="after-count">0 findings with the same scripts, at 1440 and 375 px</span><span>· direction: newsletter analytics for writers, calm and exact, one bright chart</span></p>
+  <div class="frame">
+    <iframe src="../examples/after/index.html" title="After" scrolling="no"></iframe>
+  </div>
+</body>
+</html>

@@ -1,8 +1,21 @@
 {
   "name": "ai-anti-slop",
-  "version": "0.2.0",
-  "description": "Audit and fix web apps that look AI-generated: default-looking UI, filler copy, UX states that lie, accessibility and mobile problems. Measured in a real headless Chrome with axe-core, reported first, fixed only with your approval. Skills: audit (full pass), unslop, ui-ux-improver, mobile-ux.",
-  "author": { "name": "Evan Pluchart" },
+  "version": "0.3.0",
+  "description": "Audit and fix web apps that look AI-generated: default-looking UI, filler copy, UX states that lie, accessibility and mobile problems. Writes a direction from the product, measures in a real headless Chrome with axe-core, reports first, fixes only with your approval. Skills: audit (full pass), slop-check, ui-ux-improver, mobile-ux.",
+  "author": {
+    "name": "Evan Pluchart"
+  },
   "license": "MIT",
-  "keywords": ["ui", "ux", "design", "accessibility", "audit", "mobile", "responsive", "tailwind", "shadcn", "nextjs"]
+  "keywords": [
+    "ui",
+    "ux",
+    "design",
+    "accessibility",
+    "audit",
+    "mobile",
+    "responsive",
+    "tailwind",
+    "shadcn",
+    "nextjs"
+  ]
 }

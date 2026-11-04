@@ -1,6 +1,6 @@
 # mobile-ux rules (MOB-*)
 
-Each rule: observable defect, fix, detection, severity, evidence. *Consensus* = several independent sources; *Supported* = a standard or two sources; *Single source* = raise as a question if the style guide says otherwise. Related rules in the unslop catalogue: UX-13 (field attributes), UX-20 (mobile collapse), A11Y-09 (24 px), A11Y-10 (hover), A11Y-14 (zoom), A11Y-17 (16 px), A11Y-18 (focus under a bar), A11Y-19 (tooltip), A11Y-20 (44 px).
+Each rule: observable defect, fix, detection, severity, evidence. *Consensus* = several independent sources; *Supported* = a standard or two sources; *Single source* = raise as a question if the style guide says otherwise. Related rules in the slop-check catalogue: UX-13 (field attributes), UX-20 (mobile collapse), A11Y-09 (24 px), A11Y-10 (hover), A11Y-14 (zoom), A11Y-17 (16 px), A11Y-18 (focus under a bar), A11Y-19 (tooltip), A11Y-20 (44 px).
 
 Contents: 1. Height, safe areas, keyboard · 2. Targets and touch · 3. Hover and detecting "mobile" · 4. Reflow and content · 5. Gestures and drag · 6. Navigation · 7. Tablet and panels · 8. Sheets and dialogs · 9. Scrolling · 10. Fields and iOS Safari · 11. Images and performance · 12. Home screen · 13. What `inspect.mjs --mobile` measures · 14. To check on a real phone · 15. Myths
 
