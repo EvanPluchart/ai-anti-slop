@@ -124,15 +124,24 @@ const PROBE = String.raw`(() => {
     const inline = el.tagName === "A" && el.parentElement && /^(P|LI|SPAN|TD|DD|BLOCKQUOTE)$/.test(el.parentElement.tagName) && txt(el.parentElement).length > txt(el).length + 1;
     // A checkbox inside its <label> is also checked by tapping the label: the target is the label.
     const lab = el.matches("input") && (el.closest("label") || (el.id && document.querySelector('label[for="' + CSS.escape(el.id) + '"]')));
-    if (!inline && !srOnly(el) && r.width > 0) targets.push({ el, r: lab ? lab.getBoundingClientRect() : r }); }
+    // The container that scrolls or clips the target, and whether its scroll hides the target (a list in a card).
+    let box = null; for (let e = el.parentElement; e && e !== document.body; e = e.parentElement) if (getComputedStyle(e).overflowY !== "visible") { box = e; break; }
+    const tr = lab ? lab.getBoundingClientRect() : r, br = box && box.getBoundingClientRect();
+    const vis = !br ? tr : (() => { const top = Math.max(tr.top, br.top), bottom = Math.min(tr.bottom, br.bottom); return bottom > top ? { left: tr.left, right: tr.right, top, bottom, width: tr.width, height: bottom - top } : null; })();
+    if (!inline && !srOnly(el) && r.width > 0) targets.push({ el, r: tr, box, vis }); }
   // A11Y-09 (WCAG 2.5.8): under 24 px, unless a 24 px circle centered on the target touches
   // no other target nor the circle of another small target (spacing exception).
   const tiny = (t) => t.r.width < 24 || t.r.height < 24;
   const center = (r) => [r.left + r.width / 2, r.top + r.height / 2];
   const distToRect = ([x, y], r) => Math.hypot(Math.max(r.left - x, 0, x - r.right), Math.max(r.top - y, 0, y - r.bottom));
-  for (const t of targets.filter(tiny)) { const c = center(t.r);
-    const crowded = targets.some((o) => o !== t && !o.el.contains(t.el) && !t.el.contains(o.el) &&
-      (distToRect(c, o.r) < 12 || (tiny(o) && Math.hypot(c[0] - center(o.r)[0], c[1] - center(o.r)[1]) < 24)));
+  for (const t of targets.filter(tiny)) {
+    const crowded = targets.some((o) => {
+      if (o === t || o.el.contains(t.el) || t.el.contains(o.el)) return false;
+      const [a, b] = t.box === o.box ? [t.r, o.r] : [t.vis, o.vis];
+      if (!a || !b) return false;
+      const c = center(a);
+      return distToRect(c, b) < 12 || (tiny(o) && Math.hypot(c[0] - center(b)[0], c[1] - center(b)[1]) < 24);
+    });
     if (crowded) push("A11Y-09", "blocker", "target of " + Math.round(t.r.width) + "×" + Math.round(t.r.height) + " px (< 24) too close to another", t.el); }
   for (const el of all) { if ((el.hasAttribute("onclick") || getComputedStyle(el).cursor === "pointer") && !el.closest("a,button,label,input,select,summary,[role],[tabindex]") && txt(el))
     push("A11Y-07", "blocker", "clickable element that cannot take focus (cursor:pointer without a role)", el, { text: txt(el).slice(0, 40) }); }
